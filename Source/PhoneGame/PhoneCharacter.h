@@ -1,0 +1,33 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+#pragma once
+#include "GameFramework/Character.h"
+#include "PhoneCharacter.generated.h"
+
+DECLARE_LOG_CATEGORY_EXTERN(YourLog, Log, All);
+UCLASS(meta = (BlueprintSpawnableComponent), Blueprintable)
+class PHONEGAME_API APhoneCharacter : public ACharacter
+{
+	GENERATED_BODY()
+
+public:
+	// Sets default values for this character's properties
+	APhoneCharacter(const FObjectInitializer& ObjectInitializer);
+
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason);
+
+	// Called every frame
+	virtual void Tick(float DeltaSeconds) override;
+
+	// Called to bind functionality to input
+	virtual void SetupPlayerInputComponent(class UInputComponent* InputComponent) override;
+
+	//float getFloat(char[] , int);
+	UFUNCTION(Blueprintpure, Category = GAME, meta = (WorldContext = "Phone Connection")) FVector getGyroVector(); // Category = "connection"
+	UFUNCTION(Blueprintpure, Category = GAME, meta = (WorldContext = "Phone Connection")) FVector getOrientationVector();
+	UFUNCTION(Blueprintpure, Category = GAME, meta = (WorldContext = "Phone Connection")) FVector getAccelerationVector();
+	UFUNCTION(BlueprintCallable, Category = GAME, meta = (WorldContext = "Phone Connection")) void startRecording(bool setting);
+	UFUNCTION(BlueprintCallable, Category = GAME, meta = (WorldContext = "Phone Connection")) void writeDataToFile(float x, float y, float z, float pitch, float yaw, float roll, float px, float py, float pz);
+};
