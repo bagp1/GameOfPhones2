@@ -49,6 +49,15 @@ bool killThread;
 const int BUFFER_SIZE = 8192;
 char UDPReceiveBuffer[BUFFER_SIZE];
 
+FString testUserID;
+
+FString APhoneCharacter::getUserID(){
+	//return data.gyro;
+	//UE_LOG(LogTemp, Log, TEXT("Getting Gyro Vector"));
+	return testUserID;
+	//return FVector(1, 2, 3);
+}
+
 float getFloat(char buffer[], int offset)
 {
 	Datum result;
@@ -319,9 +328,17 @@ float receive(){
 	char buffer[80];
 	//strftime(buffer, 200, "%S-%M-%H_%a-%b-%G", timeinfo);
 	strftime(buffer, 200, "%S-%M-%H_%d-%b-%Y", timeinfo);
+	
 	FString path = FPaths::GameDir() + "/DataLog/" + buffer + ".csv";
+	//int32 seed = *(timeinfo)->tm_sec() + timeinfo->tm_min() + timeinfo->tm_hour();
+	FMath::RandInit(time(0));
+	testUserID = FString::FromInt(FMath::Rand());
+	path = FPaths::GameDir() + "/DataLog/" + testUserID + ".csv";
+
 	DataLogFile.open(*path, std::ios::out);
 	DataLogFile << "acceleration:x,y,z,Orientation:yaw,pitch,roll,PredGravityX,PredGravityY,PredGravityZ\n";
+
+	
 
 	while (true){
 		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("reading"));
