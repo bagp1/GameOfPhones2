@@ -49,15 +49,6 @@ bool killThread;
 const int BUFFER_SIZE = 8192;
 char UDPReceiveBuffer[BUFFER_SIZE];
 
-FString testUserID;
-
-FString APhoneCharacter::getUserID(){
-	//return data.gyro;
-	//UE_LOG(LogTemp, Log, TEXT("Getting Gyro Vector"));
-	return testUserID;
-	//return FVector(1, 2, 3);
-}
-
 float getFloat(char buffer[], int offset)
 {
 	Datum result;
@@ -78,7 +69,7 @@ APhoneCharacter::APhoneCharacter(const FObjectInitializer& ObjectInitializer)
 // Called when the game starts or when spawned
 void APhoneCharacter::BeginPlay()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, TEXT("Gamee Starto"));
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, TEXT("Game Start"));
 	killThread = false;
 	
 	pollingThread = new std::thread(receive);
@@ -141,7 +132,7 @@ void APhoneCharacter::writeDataToFile(float x, float y, float z, float pitch, fl
 }
 
 void parseDatagram(char buffer[]){
-	GEngine->AddOnScreenDebugMessage(3, 5.f, FColor::Blue, TEXT("Parsing Datagram"));
+	//GEngine->AddOnScreenDebugMessage(3, 5.f, FColor::Blue, TEXT("Parsing Datagram"));
 	UE_LOG(YourLog, Log, TEXT("Parsing Datagram"));
 
 	//bytes 0,1 encode raw and orientation, except it seems raw is byte 1 bit 0 and orientation byte 1 bit 1
@@ -187,7 +178,7 @@ void parseDatagram(char buffer[]){
 	FString resultgx = FString::SanitizeFloat(gx);
 	FString resultgy = FString::SanitizeFloat(gy);
 	FString resultgz = FString::SanitizeFloat(gz);
-	GEngine->AddOnScreenDebugMessage(10, 5.f, FColor::Blue, resultgx + ", " + resultgy + ", "+ resultgz);
+	//GEngine->AddOnScreenDebugMessage(10, 5.f, FColor::Blue, resultgx + ", " + resultgy + ", "+ resultgz);
 
 	//if (recording) DataLogFile << ax << ", " << ay << ", " << az << ", " << GooglePitch << ", " << GoogleYaw << ", " << GoogleRoll << "\n"; //TODO PITCH AND YAW ARE BACKWARDS a nice way of setting this in game
 }
@@ -203,7 +194,7 @@ void closeConnection(SOCKET sd){
 
 float receive(){
 
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Threado Starto"));
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Threado Starto"));
 	UE_LOG(YourLog, Log, TEXT("Threado Starto"));
 	//while (true){
 	//	if (killThread) return 0;
@@ -293,7 +284,7 @@ float receive(){
 	{
 		int errnum = -1;
 		errnum = WSAGetLastError();
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, TEXT("Could not bind address to socket"));
+		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Blue, TEXT("Could not bind address to socket"));
 		fprintf(stderr, "Could not bind address to socket.\n");
 		//UE_LOG(YourLog, Warning, TEXT("tryibng to print message"));
 		//UE_LOG(YourLog, Warning, TEXT("Could not bind address to socket due to %d.\n"), errnum);//Seems like Fatal logging triggers a breakpoint
@@ -328,17 +319,9 @@ float receive(){
 	char buffer[80];
 	//strftime(buffer, 200, "%S-%M-%H_%a-%b-%G", timeinfo);
 	strftime(buffer, 200, "%S-%M-%H_%d-%b-%Y", timeinfo);
-	
 	FString path = FPaths::GameDir() + "/DataLog/" + buffer + ".csv";
-	//int32 seed = *(timeinfo)->tm_sec() + timeinfo->tm_min() + timeinfo->tm_hour();
-	FMath::RandInit(time(0));
-	testUserID = FString::FromInt(FMath::Rand());
-	path = FPaths::GameDir() + "/DataLog/" + testUserID + ".csv";
-
 	DataLogFile.open(*path, std::ios::out);
 	DataLogFile << "acceleration:x,y,z,Orientation:yaw,pitch,roll,PredGravityX,PredGravityY,PredGravityZ\n";
-
-	
 
 	while (true){
 		//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("reading"));
