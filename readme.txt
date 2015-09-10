@@ -8,6 +8,11 @@ Blueprint uses physics to make the real, game interactable sword aproach the gho
 Warning
 I can't seem to get the icon to not exclude and it's required to be in Build/Windows/ for the project to compile. I stuck it in the top level so move it before building.
 
+Branch master/A has normal settings
+Branch B has high force (and recenter?)
+Branch C has low force and normal recenter
+
+OLD
 TODO
 add time since polled variable to scale input in blueprint based off when it was last accessed
 add a practise dummy to hit. Most simple is a second ghost-real sword pair with an AI controlled ghost sword hovering nearby

@@ -328,7 +328,7 @@ float receive(){
 	strftime(buffer, 200, "%S-%M-%H_%d-%b-%Y", timeinfo);
 	//FString path = FPaths::GameDir() + "/DataLog/" + buffer + ".csv";
 	userID = FString::FromInt(time(0));
-	FString path = FPaths::GameDir() + "/DataLog/" + userID + ".csv";
+	FString path = FPaths::GameDir() + "/DataLog/" + userID + "A" +".csv";
 	DataLogFile.open(*path, std::ios::out);
 	DataLogFile << "acceleration:x,y,z,Orientation:yaw,pitch,roll,PredGravityX,PredGravityY,PredGravityZ\n";
 
