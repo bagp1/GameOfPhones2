@@ -49,6 +49,8 @@ bool killThread;
 const int BUFFER_SIZE = 8192;
 char UDPReceiveBuffer[BUFFER_SIZE];
 
+FString userID;
+
 float getFloat(char buffer[], int offset)
 {
 	Datum result;
@@ -101,6 +103,10 @@ void APhoneCharacter::SetupPlayerInputComponent(class UInputComponent* InputComp
 
 }
 
+FString APhoneCharacter::getUserID(){
+	return userID;
+}
+
 //deprecated, use orientation rather than gyro 
 FVector APhoneCharacter::getGyroVector(){
 	//return data.gyro;
@@ -127,8 +133,8 @@ void APhoneCharacter::startRecording(bool setting){
 	recording = true;
 }
 
-void APhoneCharacter::writeDataToFile(float x, float y, float z, float pitch, float yaw, float roll, float px, float py, float pz){
-	if (recording) DataLogFile << x << ", " << y << ", " << z << ", " << pitch << ", " << yaw << ", " << roll << ", " << px << ", " << py << ", " << pz << "\n";
+void APhoneCharacter::writeDataToFile(float x, float y, float z, float pitch, float yaw, float roll, float px, float py, float pz, float score){
+	if (recording) DataLogFile << x << ", " << y << ", " << z << ", " << pitch << ", " << yaw << ", " << roll << ", " << px << ", " << py << ", " << pz << ',' << score << "\n";
 }
 
 void parseDatagram(char buffer[]){
@@ -191,6 +197,7 @@ void closeConnection(SOCKET sd){
 	closesocket(sd);
 	WSACleanup();
 }
+
 
 float receive(){
 
@@ -319,7 +326,9 @@ float receive(){
 	char buffer[80];
 	//strftime(buffer, 200, "%S-%M-%H_%a-%b-%G", timeinfo);
 	strftime(buffer, 200, "%S-%M-%H_%d-%b-%Y", timeinfo);
-	FString path = FPaths::GameDir() + "/DataLog/" + buffer + ".csv";
+	//FString path = FPaths::GameDir() + "/DataLog/" + buffer + ".csv";
+	userID = FString::FromInt(time(0));
+	FString path = FPaths::GameDir() + "/DataLog/" + userID + ".csv";
 	DataLogFile.open(*path, std::ios::out);
 	DataLogFile << "acceleration:x,y,z,Orientation:yaw,pitch,roll,PredGravityX,PredGravityY,PredGravityZ\n";
 

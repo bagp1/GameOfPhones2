@@ -29,5 +29,7 @@ public:
 	UFUNCTION(Blueprintpure, Category = GAME, meta = (WorldContext = "Phone Connection")) FVector getOrientationVector();
 	UFUNCTION(Blueprintpure, Category = GAME, meta = (WorldContext = "Phone Connection")) FVector getAccelerationVector();
 	UFUNCTION(BlueprintCallable, Category = GAME, meta = (WorldContext = "Phone Connection")) void startRecording(bool setting);
-	UFUNCTION(BlueprintCallable, Category = GAME, meta = (WorldContext = "Phone Connection")) void writeDataToFile(float x, float y, float z, float pitch, float yaw, float roll, float px, float py, float pz);
-};
+	UFUNCTION(BlueprintCallable, Category = GAME, meta = (WorldContext = "Phone Connection")) void writeDataToFile(float x, float y, float z, float pitch, float yaw, float roll, float px, float py, float pz, float score);
+	UFUNCTION(Blueprintpure, Category = GAME, meta = (WorldContext = "Phone Connection")) FString getUserID(); // Category = "connection"
+
+}; 
